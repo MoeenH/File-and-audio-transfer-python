@@ -5,42 +5,11 @@ Socket Programming
 Objective: The objective of this assignment is to implement a socket programming solution that
 can transfer files between two hosts.
 
-Bonus: An extra credit will be given if the solution can broadcast audio from the server to the
-client, like a phone call.
 
-Instructions:
 
-• You can use C++, Java, or Python for this assignment.
+Bonus Part:
+• Open Server-audio.py file for the audio streaming question
 
-• You are allowed to use any library or framework for socket programming in your chosen
-programming language.
-
-• Your solution should consist of two programs: a client program and a server program.
-
-• The client program should be able to connect to the server program over a network and
-send a file to the server.
-
-• The server program should be able to receive the file sent by the client and save it on its
-local filesystem.
-
-• Your solution should be able to handle large files.
-
-• Your solution should implement error checking and handling to ensure that files are
-transferred correctly.
-
-• Your solution should handle the case when the server is offline or cannot be reached.
-
-• Your code should be well-documented, with clear and concise comments explaining the
-purpose and function of each section of code.
-
-Bonus:
-• If your solution can broadcast audio from the server to the client, you will receive extra
-credit.
-
-• The audio broadcasting feature should work in real-time, with minimal latency.
-
-• Your solution should implement error checking and handling to ensure that audio is
-transmitted correctly.
 ## Authors
 
 - [@MoeenH](https://www.github.com/MoeenH)
@@ -48,21 +17,54 @@ transmitted correctly.
 
 ## Deployment
 
-To deploy this project:
+To deploy the first part of the project:
+
+
 
 ```bash
-  python server.py
+  pip install socket  #Library to establish connection
+  pip install tqdm  #Library to print a progress bar
 
-  python client.py
+  python server.py #run this file first
+
+  python client.py #run this file after server.py
 
 
 ```
 ```python
-  
-  file = open("(FILE PATH)","rb")
+  # in server.py and client.py you can hardcode your ip and port
+  file = open("(FILE PATH)","rb")   
   client.send("(FILE NAME AT DESTINATION)".encode())
 
+  # Or else you can use this to automatically get the ip of the system
+  SERVER = socket.gethostbyname(socket.gethostname())
 
 ```
 
+To deploy the second part of the assignment:
+
+```bash
+   pip install vidstream # a opensource library available to stream audio and video
+
+```
+Now the Server-audio.py will be run on different systems. to run on the same network use the local ip address.
+-to run over the internet use public ip and relevant port.
+
+```python
+  receiver = AudioReceiver (ip, 5050) 
+  receive_thread = threading.Thread(target=receiver.start_server)
+
+  sender = AudioSender (ip2, 5555)
+  sender_thread = threading.Thread(target=sender.start_stream)
+
+  # the other host would have the same script but the ip and ports will be swapped, in order to establish connection between both the devices
+
+  receiver = AudioReceiver (ip2, 5555) 
+  receive_thread = threading.Thread(target=receiver.start_server)
+
+  sender = AudioSender (ip, 5050)
+  sender_thread = threading.Thread(target=sender.start_stream)
+
+
+```
 
